@@ -1,0 +1,7 @@
+--> Desenvolver a hash com crypto/bcrypt;
+
+--> Fazer a comparação da hash com a senha original para permitir o login;
+
+--> Iniciar o frontend da aplicação web;
+
+--> *Otimização* 
