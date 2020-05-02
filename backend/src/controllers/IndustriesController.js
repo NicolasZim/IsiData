@@ -37,12 +37,6 @@ module.exports = {
       password: hashedPassword,
     });
 
-    if (bcrypt.compare(password, hashedPassword)) {
-      console.log(password, hashedPassword);
-    } else {
-      console.log('Deu erro aqui');
-    }
-
     return response.json({ username, password: hashedPassword });
   },
 };

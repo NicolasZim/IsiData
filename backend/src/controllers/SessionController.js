@@ -1,6 +1,5 @@
-const bcrypt = require('bcrypt');
+const { compare } = require('bcrypt');
 const connection = require('../database/connection');
-const hashedPassword = require('./IndustriesController');
 
 module.exports = {
   async create(request, response) {
@@ -11,13 +10,20 @@ module.exports = {
       .where('password', password)
       .first();
 
-    delete industries.password;
-
     if (!industry) {
       return response
         .status(400)
-        .json({ error: 'No industry found with this Username/Password' });
+        .json({ error: 'Industry not found.' });
     }
+
+    const passwordIsEqual = await compare(password, industry.password);  
+
+    if (!passwordIsEqual) {
+      throw Error('Password its wrong');
+    }
+
+    delete industry.password;
+
 
     return response.json(industry);
   },
