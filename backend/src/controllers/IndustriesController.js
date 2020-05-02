@@ -1,4 +1,4 @@
-//const generateUniquePassword = require("../utils/generateUniquePassword")
+//const generateUniquePassword = require('../utils/generateUniquePassword');
 const connection = require('../database/connection');
 
 const bcrypt = require('bcrypt');
@@ -25,13 +25,8 @@ module.exports = {
       password,
     } = request.body;
 
-    const salt = 10;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    await bcrypt.hash(password, salt, async (errBcrypt, hash) => {
-      if (errBcrypt) {
-        return response.status(500).json({ error: 'Error Bcrypt' });
-      }
-    });
     await connection('industries').insert({
       id,
       name,
@@ -39,8 +34,15 @@ module.exports = {
       email,
       telephone,
       username,
-      hash,
+      password: hashedPassword,
     });
-    return response.json({ username, hash });
+
+    if (bcrypt.compare(password, hashedPassword)) {
+      console.log(password, hashedPassword);
+    } else {
+      console.log('Deu erro aqui');
+    }
+
+    return response.json({ username, password: hashedPassword });
   },
 };
